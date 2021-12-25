@@ -24,12 +24,12 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles()
-  const TOTAL_PAGE_COUNT = 10
   const [loading, setLoading] = useState(true);
   const [pokemon, setPokemon] = useState([])
+  const [resCount, setResCount] = useState()
   const [page, setPage] = useState(1)
   const [lastElement, setLastElement] = useState(null);
-
+  console.log(resCount)
   const observer = useRef(
     new IntersectionObserver(
       (entries) => {
@@ -46,6 +46,7 @@ const Home = () => {
       .then(res => res.json())
       .then(res => {
         let all = new Set([...pokemon, ...res.data]);
+        setResCount(res.count)
         setPokemon([...all]);
         setLoading(false);
       })
@@ -67,11 +68,11 @@ const Home = () => {
   }, [lastElement]);
 
   useEffect(() => {
-    if (page <= TOTAL_PAGE_COUNT) { fetchPokemon() }
+    if (resCount < 10) {
+    }
+    else fetchPokemon()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
-
-
 
   return (
     <MainLayout>
@@ -93,7 +94,6 @@ const Home = () => {
           {loading && <div className={classes.loader}><CircularProgress /> </div>}
         </Box>
       </CardContainer>
-
     </MainLayout>
   );
 };
