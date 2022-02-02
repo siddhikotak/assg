@@ -26,10 +26,10 @@ const Home = () => {
   const classes = useStyles()
   const [loading, setLoading] = useState(true);
   const [pokemon, setPokemon] = useState([])
-  const [resCount, setResCount] = useState()
-  const [page, setPage] = useState(1)
+  const [count, setCount] = useState()
+  const [page, setPage] = useState(1440)
   const [lastElement, setLastElement] = useState(null);
-  console.log(resCount)
+
   const observer = useRef(
     new IntersectionObserver(
       (entries) => {
@@ -46,7 +46,7 @@ const Home = () => {
       .then(res => res.json())
       .then(res => {
         let all = new Set([...pokemon, ...res.data]);
-        setResCount(res.count)
+        setCount(res.totalCount)
         setPokemon([...all]);
         setLoading(false);
       })
@@ -68,7 +68,7 @@ const Home = () => {
   }, [lastElement]);
 
   useEffect(() => {
-    if (resCount < 10) {
+    if (page > Math.ceil(count)) {
     }
     else fetchPokemon()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +82,7 @@ const Home = () => {
             {
               pokemon?.map((el, idx) => {
                 return (
-                  <Grid item xs={12} md={3} key={idx} >
+                  <Grid item xs={12} md={6} lg={4} xl={3} key={idx} >
                     <div ref={setLastElement}>
                       <Cards cardData={el} />
                     </div>
